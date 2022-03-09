@@ -59,6 +59,18 @@ function mapSchema(type: ZodTypeAny): SchemaObject | undefined {
   }
 }
 
+function mapTypeName(type: ZodTypeAny): SchemaObject | undefined {
+  switch (type._def.typeName) {
+    case ZodFirstPartyTypeKind.ZodBoolean:
+      return {
+        type: "string",
+        enum: type._def.values,
+      };
+    default:
+      return undefined;
+  }
+}
+
 export function createSchema(
   obj: ZodTypeAny | Reference<any> | Component<any>
 ): SchemaObject | ReferenceObject | undefined {
@@ -97,6 +109,10 @@ export function createSchema(
   }
   if ("checks" in obj._def) {
     return mapSchema(obj);
+  }
+
+  if ("typeName" in obj._def) {
+    return mapTypeName(obj);
   }
   return undefined;
 }
