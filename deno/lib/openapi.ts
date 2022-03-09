@@ -63,6 +63,10 @@ function mapTypeName(type: ZodTypeAny): SchemaObject | undefined {
   switch (type._def.typeName) {
     case ZodFirstPartyTypeKind.ZodBoolean:
       return {
+        type: "boolean",
+      };
+    case ZodFirstPartyTypeKind.ZodEnum:
+      return {
         type: "string",
         enum: type._def.values,
       };
